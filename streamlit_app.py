@@ -22,7 +22,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title(arabic_text("لوحة تحكم مبيعات"))
+# العنوان الرئيسي مع HTML
+st.markdown(f"<h1 style='text-align:right; direction: rtl;'>{arabic_text('لوحة تحكم مبيعات')}</h1>", unsafe_allow_html=True)
 
 @st.cache_data
 def load_data():
@@ -39,26 +40,22 @@ except FileNotFoundError:
 if st.checkbox(arabic_text("عرض البيانات الخام")):
     st.dataframe(df)
 
-# تجميع المبيعات حسب المنتج
 product_sales = df.groupby("المنتج")["الإجمالي"].sum().sort_values(ascending=False)
-st.subheader(arabic_text("إجمالي المبيعات حسب المنتج"))
+st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('إجمالي المبيعات حسب المنتج')}</h3>", unsafe_allow_html=True)
 st.bar_chart(product_sales)
 
-# تجميع المبيعات حسب الفرع
 branch_sales = df.groupby("الفرع")["الإجمالي"].sum().sort_values(ascending=False)
-st.subheader(arabic_text("إجمالي المبيعات حسب الفرع"))
+st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('إجمالي المبيعات حسب الفرع')}</h3>", unsafe_allow_html=True)
 st.bar_chart(branch_sales)
 
-# تطور المبيعات عبر الزمن
 time_sales = df.groupby("تاريخ_الطلب")["الإجمالي"].sum()
-st.subheader(arabic_text("تطور المبيعات عبر الزمن"))
+st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('تطور المبيعات عبر الزمن')}</h3>", unsafe_allow_html=True)
 st.line_chart(time_sales)
 
-# أفضل منتج وأفضل فرع
 best_product = product_sales.idxmax()
 best_branch = branch_sales.idxmax()
 
-st.subheader(arabic_text("توصيات"))
-st.write(arabic_text(f"أفضل منتج مبيعًا: {best_product}"))
-st.write(arabic_text(f"أفضل فرع من حيث المبيعات: {best_branch}"))
-st.write(arabic_text("ننصح بالتركيز التسويقي على المنتج والفرع الأفضل لتعزيز الأرباح."))
+st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('توصيات')}</h3>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text(f'أفضل منتج مبيعًا: {best_product}')}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text(f'أفضل فرع من حيث المبيعات: {best_branch}')}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text('ننصح بالتركيز التسويقي على المنتج والفرع الأفضل لتعزيز الأرباح.')}</p>", unsafe_allow_html=True)
