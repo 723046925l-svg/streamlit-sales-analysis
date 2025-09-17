@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import arabic_reshaper
 from bidi.algorithm import get_display
 
@@ -9,13 +8,14 @@ def arabic_text(text):
     bidi_text = get_display(reshaped_text)
     return bidi_text
 
+# ضبط اتجاه الصفحة ونوع الخط للكتابة بالعربي
 st.markdown(
     """
     <style>
     body {
         direction: rtl;
         text-align: right;
-        font-family: 'Arial', sans-serif;
+        font-family: 'Tahoma', Arial, sans-serif;
     }
     </style>
     """,
@@ -30,23 +30,31 @@ def load_data():
     df["تاريخ_الطلب"] = pd.to_datetime(df["تاريخ_الطلب"])
     return df
 
-df = load_data()
+try:
+    df = load_data()
+except FileNotFoundError:
+    st.error(arabic_text("خطأ: لم يتم العثور على ملف البيانات sales_data.xlsx"))
+    st.stop()
 
 if st.checkbox(arabic_text("عرض البيانات الخام")):
     st.dataframe(df)
 
+# تجميع المبيعات حسب المنتج
 product_sales = df.groupby("المنتج")["الإجمالي"].sum().sort_values(ascending=False)
 st.subheader(arabic_text("إجمالي المبيعات حسب المنتج"))
 st.bar_chart(product_sales)
 
+# تجميع المبيعات حسب الفرع
 branch_sales = df.groupby("الفرع")["الإجمالي"].sum().sort_values(ascending=False)
 st.subheader(arabic_text("إجمالي المبيعات حسب الفرع"))
 st.bar_chart(branch_sales)
 
+# تطور المبيعات عبر الزمن
 time_sales = df.groupby("تاريخ_الطلب")["الإجمالي"].sum()
 st.subheader(arabic_text("تطور المبيعات عبر الزمن"))
 st.line_chart(time_sales)
 
+# أفضل منتج وأفضل فرع
 best_product = product_sales.idxmax()
 best_branch = branch_sales.idxmax()
 
