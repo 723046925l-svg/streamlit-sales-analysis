@@ -8,22 +8,23 @@ def arabic_text(text):
     bidi_text = get_display(reshaped_text)
     return bidi_text
 
-# ضبط اتجاه الصفحة ونوع الخط للكتابة بالعربي
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
     body {
-        direction: rtl;
-        text-align: right;
-        font-family: 'Tahoma', Arial, sans-serif;
+        font-family: 'Cairo', Tahoma, Arial, sans-serif !important;
+        direction: rtl !important;
+        text-align: right !important;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# العنوان الرئيسي مع HTML
-st.markdown(f"<h1 style='text-align:right; direction: rtl;'>{arabic_text('لوحة تحكم مبيعات')}</h1>", unsafe_allow_html=True)
+st.markdown(
+    f"<h1 style='direction: rtl; text-align: right;'>{arabic_text('لوحة تحكم مبيعات')}</h1>", unsafe_allow_html=True
+)
 
 @st.cache_data
 def load_data():
@@ -38,24 +39,24 @@ except FileNotFoundError:
     st.stop()
 
 if st.checkbox(arabic_text("عرض البيانات الخام")):
-    st.dataframe(df)
+    st.dataframe(df)  # البيانات الأصلية بدون reshaping
 
 product_sales = df.groupby("المنتج")["الإجمالي"].sum().sort_values(ascending=False)
-st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('إجمالي المبيعات حسب المنتج')}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='direction: rtl; text-align: right;'>{arabic_text('إجمالي المبيعات حسب المنتج')}</h3>", unsafe_allow_html=True)
 st.bar_chart(product_sales)
 
 branch_sales = df.groupby("الفرع")["الإجمالي"].sum().sort_values(ascending=False)
-st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('إجمالي المبيعات حسب الفرع')}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='direction: rtl; text-align: right;'>{arabic_text('إجمالي المبيعات حسب الفرع')}</h3>", unsafe_allow_html=True)
 st.bar_chart(branch_sales)
 
 time_sales = df.groupby("تاريخ_الطلب")["الإجمالي"].sum()
-st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('تطور المبيعات عبر الزمن')}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='direction: rtl; text-align: right;'>{arabic_text('تطور المبيعات عبر الزمن')}</h3>", unsafe_allow_html=True)
 st.line_chart(time_sales)
 
 best_product = product_sales.idxmax()
 best_branch = branch_sales.idxmax()
 
-st.markdown(f"<h3 style='text-align:right; direction: rtl;'>{arabic_text('توصيات')}</h3>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text(f'أفضل منتج مبيعًا: {best_product}')}</p>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text(f'أفضل فرع من حيث المبيعات: {best_branch}')}</p>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align:right; direction: rtl;'>{arabic_text('ننصح بالتركيز التسويقي على المنتج والفرع الأفضل لتعزيز الأرباح.')}</p>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='direction: rtl; text-align: right;'>{arabic_text('توصيات')}</h3>", unsafe_allow_html=True)
+st.markdown(f"<p style='direction: rtl; text-align: right;'>{arabic_text(f'أفضل منتج مبيعًا: {best_product}')}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='direction: rtl; text-align: right;'>{arabic_text(f'أفضل فرع من حيث المبيعات: {best_branch}')}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='direction: rtl; text-align: right;'>{arabic_text('ننصح بالتركيز التسويقي على المنتج والفرع الأفضل لتعزيز الأرباح.')}</p>", unsafe_allow_html=True)
