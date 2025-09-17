@@ -22,9 +22,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(
-    f"<h1 style='direction: rtl; text-align: right;'>{arabic_text('لوحة تحكم مبيعات')}</h1>", unsafe_allow_html=True
-)
+st.markdown(f"<h1 style='direction: rtl; text-align: right;'>{arabic_text('لوحة تحكم مبيعات')}</h1>", unsafe_allow_html=True)
 
 @st.cache_data
 def load_data():
@@ -39,7 +37,7 @@ except FileNotFoundError:
     st.stop()
 
 if st.checkbox(arabic_text("عرض البيانات الخام")):
-    st.dataframe(df)  # البيانات الأصلية بدون reshaping
+    st.dataframe(df)
 
 product_sales = df.groupby("المنتج")["الإجمالي"].sum().sort_values(ascending=False)
 st.markdown(f"<h3 style='direction: rtl; text-align: right;'>{arabic_text('إجمالي المبيعات حسب المنتج')}</h3>", unsafe_allow_html=True)
